@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 
 import Controller.ActivityController;
+import Controller.AthleteController;
 import Enum.SexEnum;
 import Model.ActivityModel;
 import Model.AthleteModel;
@@ -15,7 +16,6 @@ import ch.qos.logback.classic.Logger;
 
 import java.util.Date;
 
-import org.bson.BsonValue;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
@@ -43,14 +43,15 @@ public class Connection {
             AthleteRepository athleteRepository = new AthleteRepository(
                     desktopDatabase.getCollection("athletes", AthleteModel.class));
 
+            AthleteController athleteController = new AthleteController(athleteRepository);
             AthleteModel athleteToSave = new AthleteModel(
                     "LOCTIN",
                     "Jeffrey",
                     new Date(),
                     SexEnum.UNDEFINED);
-            ObjectId savedAthleteId = athleteRepository.saveAthlete(athleteToSave);
+            ObjectId savedAthleteId = athleteController.saveAthlete(athleteToSave);
 
-            AthleteModel athleteModelReturned = athleteRepository.getAthlete(savedAthleteId);
+            AthleteModel athleteModelReturned = athleteController.getAthleteById(savedAthleteId);
             if (athleteModelReturned != null) {
                 String messageToLog = athleteModelReturned.getFirstName() + " " + athleteModelReturned.getLastName();
                 logger.info("Created Athlete : " + messageToLog);
@@ -62,12 +63,11 @@ public class Connection {
             athleteUpdateModel.setId(savedAthleteId);
             athleteUpdateModel.setLastName("HOIZEY");
             athleteUpdateModel.setFirstName("Evan");
-            athleteRepository.updateAthlete(athleteUpdateModel);
+            athleteController.updateAthlete(athleteUpdateModel);
 
-            AthleteModel updatedAthleteModelReturned = athleteRepository.getAthlete(savedAthleteId);
+            AthleteModel updatedAthleteModelReturned = athleteController.getAthleteById(savedAthleteId);
             if (updatedAthleteModelReturned != null) {
-                String messageToLog = updatedAthleteModelReturned.getFirstName() + " "
-                        + updatedAthleteModelReturned.getLastName();
+                String messageToLog = updatedAthleteModelReturned.getFirstName() + " " + updatedAthleteModelReturned.getLastName();
                 logger.info("Updated Athlete : " + messageToLog);
             } else {
                 logger.error("Athlete not found");
@@ -79,16 +79,15 @@ public class Connection {
                             savedAthleteId));
 
             activityController.saveActivity(new ActivityModel("PushUp", 20d, new Date(), 2d));
-            // athleteRepository.deleteAthlete(savedAthleteId);
-            // AthleteModel deletedAthleteModelReturned =
-            // athleteRepository.getAthlete(savedAthleteId);
-            // if (deletedAthleteModelReturned != null) {
-            // String messageToLog = deletedAthleteModelReturned.getFirstName() + " "
-            // + deletedAthleteModelReturned.getLastName();
-            // logger.info("Updated Athlete : " + messageToLog);
-            // } else {
-            // logger.error("Athlete not found");
-            // }
+            athleteController.deleteAthlete(savedAthleteId);
+            AthleteModel deletedAthleteModelReturned =
+            athleteController.getAthleteById(savedAthleteId);
+            if (deletedAthleteModelReturned != null) {
+                String messageToLog = deletedAthleteModelReturned.getFirstName() + " " + deletedAthleteModelReturned.getLastName();
+                logger.info("Updated Athlete : " + messageToLog);
+            } else {
+                logger.error("Athlete not found");
+            }
 
         } catch (org.bson.BsonInvalidOperationException exception) {
             logger.error("Impossible to convert _id to ObjectId", exception);
