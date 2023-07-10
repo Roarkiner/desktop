@@ -1,51 +1,72 @@
 package Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bson.BsonValue;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import Model.ActivityModel;
+import Model.AthleteModel;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class ActivityRepository {
 
-    private MongoCollection<ActivityModel> activityCollection;
+    private MongoCollection<AthleteModel> athleteCollection;
+    private AthleteRepository athleteRepository;
+    private ObjectId athleteId;
 
-    public ActivityRepository(MongoCollection<ActivityModel> activityCollection){
-        this.activityCollection = activityCollection;
+    public ActivityRepository(MongoCollection<AthleteModel> athleteCollection, ObjectId athleteId) {
+        this.athleteCollection = athleteCollection;
+        this.athleteId = athleteId;
     }
 
-    public ActivityModel getActivity(ObjectId activityId){
-        return activityCollection.find(eq("_id", activityId)).first();
+    public ActivityModel getActivity(ObjectId activityId) {
+        AthleteModel athlete = athleteRepository.getAthlete(athleteId);
+        if (athlete != null) {
+            return athlete.getActivities().stream()
+                    .filter(activity -> activity.getActivityId().equals(activityId))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
     }
 
-    public List<ActivityModel> getAllActivities(){
-        List<ActivityModel> activityList = new ArrayList<>();
-        activityCollection.find()
-            .into(activityList);
-        return activityList;
+    public List<ActivityModel> getAllActivities() {
+        AthleteModel athlete = athleteRepository.getAthlete(athleteId);
+        if (athlete != null) {
+            return athlete.getActivities();
+        }
+
+        return new ArrayList<>();
     }
 
-    public BsonValue saveActivity(ActivityModel activityModel){
-        InsertOneResult insertResult = activityCollection.insertOne(activityModel);
-        return insertResult.getInsertedId();
+    public ObjectId saveActivity(ActivityModel activityModel) {
+        ObjectId activityId = new ObjectId();
+        activityModel.setActivityId(activityId);
+        athleteCollection.updateOne(Filters.eq("_id", athleteId),
+                new Document("$push", new Document("activities", activityModel)));
+        return activityId;
     }
 
-    public ActivityModel updateActivity(ActivityModel activityModel){
-        Bson filterById = eq("_id", activityModel.getId());
-        FindOneAndReplaceOptions findOneAndReplaceOptions = new FindOneAndReplaceOptions().returnDocument(ReturnDocument.AFTER);
-        return activityCollection.findOneAndReplace(filterById, activityModel, findOneAndReplaceOptions);
+    public void updateActivity(ActivityModel activityModel) {
+        Document update = new Document("$set", new Document("activities.$", activityModel));
+        athleteCollection.updateOne(Filters.and(
+                Filters.eq("_id", athleteId),
+                Filters.eq("activities.activityId", activityModel.getActivityId())), update);
     }
 
-    public long deleteActivity(ObjectId activityId){
-        DeleteResult deleteResult = activityCollection.deleteOne(eq("_id", activityId));
-        return deleteResult.getDeletedCount();
+    public void deleteActivity(ObjectId activityId) {
+        athleteCollection.updateOne(Filters.eq("_id", athleteId),
+                new Document("$pull", new Document("activities", new Document("_id", activityId))));
     }
 }

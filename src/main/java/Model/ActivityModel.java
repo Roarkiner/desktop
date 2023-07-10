@@ -9,21 +9,20 @@ import org.bson.types.ObjectId;
 
 public class ActivityModel {
     @BsonId
-    private ObjectId id;
+    private ObjectId activityId;
     private String name;
     private Double duration;
     private Date date;
     private Double rpe;
     private Double load;
-    
+
     @BsonCreator
     public ActivityModel(
-        @BsonProperty("name") String name,
-        @BsonProperty("duration") Double duration,
-        @BsonProperty("date") Date date,
-        @BsonProperty("rpe") Double rpe,
-        @BsonProperty("load") Double load
-    ){
+            @BsonProperty("name") String name,
+            @BsonProperty("duration") Double duration,
+            @BsonProperty("date") Date date,
+            @BsonProperty("rpe") Double rpe,
+            @BsonProperty("load") Double load) {
         this.name = name;
         this.duration = duration;
         this.date = date;
@@ -31,10 +30,25 @@ public class ActivityModel {
         this.load = load;
     }
 
-    public ObjectId getId() {
-        return id;
+    public ActivityModel(
+            String name,
+            Double duration,
+            Date date,
+            Double rpe) {
+        this.name = name;
+        this.duration = duration;
+        this.date = date;
+        this.rpe = rpe;
     }
-    
+
+    public ObjectId getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(ObjectId activityId) {
+        this.activityId = activityId;
+    }
+
     public String getName() {
         return name;
     }

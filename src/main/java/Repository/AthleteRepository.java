@@ -18,33 +18,34 @@ public class AthleteRepository {
 
     private MongoCollection<AthleteModel> athleteCollection;
 
-    public AthleteRepository(MongoCollection<AthleteModel> athleteCollection){
+    public AthleteRepository(MongoCollection<AthleteModel> athleteCollection) {
         this.athleteCollection = athleteCollection;
     }
-    
-    public AthleteModel getAthlete(ObjectId athleteId){
+
+    public AthleteModel getAthlete(ObjectId athleteId) {
         return athleteCollection.find(eq("_id", athleteId)).first();
     }
 
-    public List<AthleteModel> getAllActivities(){
+    public List<AthleteModel> getAllAthletes() {
         List<AthleteModel> athleteList = new ArrayList<>();
         athleteCollection.find()
-            .into(athleteList);
+                .into(athleteList);
         return athleteList;
     }
 
-    public BsonValue saveAthlete(AthleteModel athleteModel){
+    public ObjectId saveAthlete(AthleteModel athleteModel) {
         InsertOneResult insertResult = athleteCollection.insertOne(athleteModel);
-        return insertResult.getInsertedId();
+        return insertResult.getInsertedId().asObjectId().getValue();
     }
 
-    public AthleteModel updateAthlete(AthleteModel athleteModel){
+    public AthleteModel updateAthlete(AthleteModel athleteModel) {
         Bson filterById = eq("_id", athleteModel.getId());
-        FindOneAndReplaceOptions findOneAndReplaceOptions = new FindOneAndReplaceOptions().returnDocument(ReturnDocument.AFTER);
+        FindOneAndReplaceOptions findOneAndReplaceOptions = new FindOneAndReplaceOptions()
+                .returnDocument(ReturnDocument.AFTER);
         return athleteCollection.findOneAndReplace(filterById, athleteModel, findOneAndReplaceOptions);
     }
 
-    public long deleteAthlete(ObjectId athleteId){
+    public long deleteAthlete(ObjectId athleteId) {
         DeleteResult deleteResult = athleteCollection.deleteOne(eq("_id", athleteId));
         return deleteResult.getDeletedCount();
     }
