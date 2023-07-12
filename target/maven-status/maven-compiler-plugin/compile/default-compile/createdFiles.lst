@@ -1,4 +1,5 @@
 Repository\AthleteRepository.class
+helper\CalendarDateHelper.class
 Model\AthleteModel.class
 Connection.class
 Model\ActivityModel.class

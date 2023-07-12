@@ -11,18 +11,18 @@ public class ActivityModel {
     @BsonId
     private ObjectId activityId;
     private String name;
-    private Double duration;
+    private double duration;
     private Date date;
-    private Double rpe;
-    private Double load;
+    private double rpe;
+    private double load;
 
     @BsonCreator
     public ActivityModel(
             @BsonProperty("name") String name,
-            @BsonProperty("duration") Double duration,
+            @BsonProperty("duration") double duration,
             @BsonProperty("date") Date date,
-            @BsonProperty("rpe") Double rpe,
-            @BsonProperty("load") Double load) {
+            @BsonProperty("rpe") double rpe,
+            @BsonProperty("load") double load) {
         this.name = name;
         this.duration = duration;
         this.date = date;
@@ -32,9 +32,9 @@ public class ActivityModel {
 
     public ActivityModel(
             String name,
-            Double duration,
+            double duration,
             Date date,
-            Double rpe) {
+            double rpe) {
         this.name = name;
         this.duration = duration;
         this.date = date;
@@ -57,11 +57,11 @@ public class ActivityModel {
         this.name = name;
     }
 
-    public Double getDuration() {
+    public double getDuration() {
         return duration;
     }
 
-    public void setDuration(Double duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 
@@ -73,19 +73,19 @@ public class ActivityModel {
         this.date = date;
     }
 
-    public Double getRpe() {
+    public double getRpe() {
         return rpe;
     }
 
-    public void setRpe(Double rpe) {
+    public void setRpe(double rpe) {
         this.rpe = rpe;
     }
 
-    public Double getLoad() {
+    public double getLoad() {
         return load;
     }
 
-    public void setLoad(Double load) {
+    public void setLoad(double load) {
         this.load = load;
     }
 }
