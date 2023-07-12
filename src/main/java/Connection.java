@@ -67,7 +67,8 @@ public class Connection {
 
             AthleteModel updatedAthleteModelReturned = athleteController.getAthleteById(savedAthleteId);
             if (updatedAthleteModelReturned != null) {
-                String messageToLog = updatedAthleteModelReturned.getFirstName() + " " + updatedAthleteModelReturned.getLastName();
+                String messageToLog = updatedAthleteModelReturned.getFirstName() + " "
+                        + updatedAthleteModelReturned.getLastName();
                 logger.info("Updated Athlete : " + messageToLog);
             } else {
                 logger.error("Athlete not found");
@@ -80,10 +81,10 @@ public class Connection {
 
             activityController.saveActivity(new ActivityModel("PushUp", 20d, new Date(), 2d));
             athleteController.deleteAthlete(savedAthleteId);
-            AthleteModel deletedAthleteModelReturned =
-            athleteController.getAthleteById(savedAthleteId);
+            AthleteModel deletedAthleteModelReturned = athleteController.getAthleteById(savedAthleteId);
             if (deletedAthleteModelReturned != null) {
-                String messageToLog = deletedAthleteModelReturned.getFirstName() + " " + deletedAthleteModelReturned.getLastName();
+                String messageToLog = deletedAthleteModelReturned.getFirstName() + " "
+                        + deletedAthleteModelReturned.getLastName();
                 logger.info("Updated Athlete : " + messageToLog);
             } else {
                 logger.error("Athlete not found");

@@ -1,13 +1,10 @@
 package Controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import Model.ActivityModel;
 import Model.AthleteWorkoutInformationsModel;
 import exceptions.NotEnoughActivitiesException;
-import helper.CalendarDateHelper;
 
 public class AthleteWorkoutInformationsController {
 
@@ -27,7 +24,8 @@ public class AthleteWorkoutInformationsController {
 
         try {
             pastFourWeeksActivities = activityController.getActivitiesFromPastWeeks(activities, 4);
-            double chronicLoad = calculateLoadAverage(activityController.calculateSumOfLoadsOfActivities(pastFourWeeksActivities), 7);
+            double chronicLoad = calculateLoadAverage(
+                    activityController.calculateSumOfLoadsOfActivities(pastFourWeeksActivities), 7);
             acwr = calculateACWR(lastWeekLoadAverage, chronicLoad);
         } catch (NotEnoughActivitiesException e) {
             acwr = null;
@@ -42,7 +40,7 @@ public class AthleteWorkoutInformationsController {
     public double calculateMonotony(double sumOfLoads, double loadAverage) {
         double monotony = 0d;
 
-        if(sumOfLoads != 0) {
+        if (sumOfLoads != 0) {
             monotony = sumOfLoads / Math.pow(loadAverage, 2);
         }
 
