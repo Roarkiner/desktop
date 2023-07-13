@@ -2,6 +2,7 @@ package Controller;
 
 import java.util.List;
 
+import Enum.PhysicalConditionEnum;
 import Model.ActivityModel;
 import Model.AthleteWorkoutInformationsModel;
 import exceptions.NotEnoughActivitiesException;
@@ -61,5 +62,31 @@ public class AthleteWorkoutInformationsController {
 
     public double calculateACWR(double acuteLoad, double chronicLoad) {
         return acuteLoad / chronicLoad;
+    }
+
+    public PhysicalConditionEnum getPhysicalCondition(AthleteWorkoutInformationsModel athleteWorkoutInformations) {
+        if(
+            athleteWorkoutInformations.getMonotony() < 2 && 
+            athleteWorkoutInformations.getConstraint() < 6000 && 
+            athleteWorkoutInformations.getAwcr() > 0.8 &&
+            athleteWorkoutInformations.getAwcr() < 1.3 
+        ) {
+            return PhysicalConditionEnum.OPTIMAL;
+        } else if(
+            athleteWorkoutInformations.getMonotony() >= 2 &&
+            athleteWorkoutInformations.getMonotony() < 2.5 ||
+            athleteWorkoutInformations.getConstraint() >= 6000 &&
+            athleteWorkoutInformations.getConstraint() < 10000
+        ) {
+            return PhysicalConditionEnum.EXHAUSTING;
+        } else if(
+            athleteWorkoutInformations.getMonotony() >= 2.5 ||
+            athleteWorkoutInformations.getConstraint() >= 10000 ||
+            athleteWorkoutInformations.getAwcr() > 1.5
+        ) {
+            return PhysicalConditionEnum.DANGEROUS;
+        } else {
+            return PhysicalConditionEnum.RAS;
+        }
     }
 }

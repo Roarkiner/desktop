@@ -1,12 +1,13 @@
 package Repository;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+
+import Enum.PhysicalConditionEnum;
 import Model.ActivityModel;
 import Model.AthleteModel;
 
