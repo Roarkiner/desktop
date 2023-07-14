@@ -22,7 +22,7 @@ import Model.AthleteModel;
 import Repository.AthleteRepository;
 import exceptions.AthleteValidationException;
 
-public class AthleteControllerTest {
+class AthleteControllerTest {
 
     @Mock
     private AthleteRepository athleteRepository;
@@ -36,7 +36,7 @@ public class AthleteControllerTest {
     }
 
     @Test
-    public void testGetAthleteById() {
+    void testGetAthleteById() {
         // Arrange
         ObjectId athleteId = new ObjectId();
         AthleteModel mockAthlete = new AthleteModel("Michel", "Polnaref", new Date(), SexEnum.MALE);
@@ -54,7 +54,7 @@ public class AthleteControllerTest {
     }
 
     @Test
-    public void testGetAllAthletes() {
+    void testGetAllAthletes() {
         // Arrange
         AthleteModel athlete1 = new AthleteModel("Brigitte", "Mythra", new Date(), SexEnum.FEMALE);
         athlete1.setId(new ObjectId());
@@ -89,7 +89,7 @@ public class AthleteControllerTest {
 
     @ParameterizedTest
     @MethodSource("provideDataForSaveUpdateAthlete")
-    public void testSaveAthlete(String lastName, String firstname, Date birthDate, SexEnum sex, boolean shouldThrow,
+    void testSaveAthlete(String lastName, String firstname, Date birthDate, SexEnum sex, boolean shouldThrow,
             int exceptionsSize) {
         AthleteModel athlete = new AthleteModel(lastName, firstname, birthDate, sex);
 
@@ -107,7 +107,7 @@ public class AthleteControllerTest {
     
     @ParameterizedTest
     @MethodSource("provideDataForSaveUpdateAthlete")
-    public void testUpdateAthlete(String lastName, String firstname, Date birthDate, SexEnum sex, boolean shouldThrow,
+    void testUpdateAthlete(String lastName, String firstname, Date birthDate, SexEnum sex, boolean shouldThrow,
             int exceptionsSize) {
         AthleteModel athlete = new AthleteModel(lastName, firstname, birthDate, sex);
 
