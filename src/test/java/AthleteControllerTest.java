@@ -135,10 +135,10 @@ class AthleteControllerTest {
 
     @ParameterizedTest
     @MethodSource("provideDataForDeleteAthlete")
-    void testDeleteAthlete(long numberOfAtleteDeleted, boolean shouldThrow) {
+    void testDeleteAthlete(long numberOfAtletesDeleted, boolean shouldThrow) {
         // Arrange
         ObjectId athleteId = new ObjectId();
-        when(athleteRepository.deleteAthlete(athleteId)).thenReturn(numberOfAtleteDeleted);
+        when(athleteRepository.deleteAthlete(athleteId)).thenReturn(numberOfAtletesDeleted);
 
         // Act & Assert
         if (shouldThrow) {
