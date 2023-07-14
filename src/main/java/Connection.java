@@ -13,6 +13,7 @@ import Repository.ActivityRepository;
 import Repository.AthleteRepository;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import exceptions.ActivityValidationException;
 import exceptions.AthleteValidationException;
 
 import java.util.Date;
@@ -95,9 +96,9 @@ public class Connection {
             logger.error("Impossible to convert _id to ObjectId", exception);
         } catch (IllegalArgumentException exception) {
             logger.error("Database not found", exception);
-        } catch (AthleteValidationException exception) {
+        } catch (AthleteValidationException | ActivityValidationException exception) {
             logger.error(exception.getMessage());
-        } catch (Exception exception) {
+        }  catch (Exception exception) {
             throw exception;
         }
     }

@@ -5,11 +5,18 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
 import org.bson.types.ObjectId;
 
 import Model.ActivityModel;
 import Repository.ActivityRepository;
+import exceptions.ActivityValidationException;
 import exceptions.NotEnoughActivitiesException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 public class ActivityController {
     private ActivityRepository activityRepository;
@@ -26,6 +33,45 @@ public class ActivityController {
         return activityRepository.getAllActivities();
     }
 
+    public ObjectId saveActivity(ActivityModel activityModel) throws ActivityValidationException {
+        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
+        activityModel.setLoad(load);
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<ActivityModel>> validationErrors = validator.validate(activityModel);
+        if (!validationErrors.isEmpty()) {
+            throw new ActivityValidationException("There's validation exceptions", validationErrors);
+        }
+
+        return activityRepository.saveActivity(activityModel);
+    }
+
+    public void updateActivity(ActivityModel activityModel) throws ActivityValidationException {
+        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
+        activityModel.setLoad(load);
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<ActivityModel>> validationErrors = validator.validate(activityModel);
+        if (!validationErrors.isEmpty()) {
+            throw new ActivityValidationException("There's validation exceptions", validationErrors);
+        }
+
+        activityRepository.updateActivity(activityModel);
+    }
+
+    public void deleteActivity(ObjectId activityId) throws IllegalArgumentException {
+        List<ActivityModel> activitiesBeforeDeletion = getAllActivities();
+        int numberOfActivitiesBeforeDeletion = activitiesBeforeDeletion.size();
+        activityRepository.deleteActivity(activityId);
+        List<ActivityModel> activitiesAfterDeletion = getAllActivities();
+        int numberOfActivitiesAfterDeletion = activitiesAfterDeletion.size();
+        if (numberOfActivitiesBeforeDeletion == numberOfActivitiesAfterDeletion) {
+            throw new IllegalArgumentException("No activity matches the id : " + activityId);
+        }
+    }
+    
     public List<ActivityModel> getActivitiesBetweenDates(List<ActivityModel> activities, Date startDate, Date endDate) {
         List<ActivityModel> activitiesBetweenDates = new ArrayList<>();
         for (ActivityModel activity : activities) {
@@ -38,35 +84,7 @@ public class ActivityController {
         activitiesBetweenDates.sort(Comparator.comparing(ActivityModel::getDate));
         return activitiesBetweenDates;
     }
-
-    public ObjectId saveActivity(ActivityModel activityModel) {
-        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
-        activityModel.setLoad(load);
-        return activityRepository.saveActivity(activityModel);
-    }
-
-    public void updateActivity(ActivityModel activityModel) {
-        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
-        activityModel.setLoad(load);
-        activityRepository.updateActivity(activityModel);
-    }
-
-    public void deleteActivity(ObjectId activityId) {
-        activityRepository.deleteActivity(activityId);
-    }
-
-    private double calculateLoad(double duration, double rpe) {
-        return duration * rpe;
-    }
-
-    public double calculateSumOfLoadsOfActivities(List<ActivityModel> activities) {
-        double sumOfLoads = 0d;
-        for (ActivityModel activity : activities) {
-            sumOfLoads += activity.getLoad();
-        }
-        return sumOfLoads;
-    }
-
+    
     public List<ActivityModel> getActivitiesFromPastWeeks(List<ActivityModel> activities, int numWeeksAgo)
             throws NotEnoughActivitiesException {
         Calendar calendar = Calendar.getInstance();
@@ -75,6 +93,7 @@ public class ActivityController {
 
         Date startDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, 6);
+        calendar.add(Calendar.WEEK_OF_YEAR, numWeeksAgo - 1);
         Date endDate = calendar.getTime();
 
         boolean hasOlderActivity = activities.stream()
@@ -85,5 +104,17 @@ public class ActivityController {
         }
 
         return getActivitiesBetweenDates(activities, startDate, endDate);
+    }
+
+    public double calculateLoad(double duration, double rpe) {
+        return duration * rpe;
+    }
+
+    public double calculateSumOfLoadsOfActivities(List<ActivityModel> activities) {
+        double sumOfLoads = 0d;
+        for (ActivityModel activity : activities) {
+            sumOfLoads += activity.getLoad();
+        }
+        return sumOfLoads;
     }
 }

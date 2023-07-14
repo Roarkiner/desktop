@@ -91,8 +91,10 @@ class AthleteControllerTest {
     @MethodSource("provideDataForSaveUpdateAthlete")
     void testSaveAthlete(String lastName, String firstname, Date birthDate, SexEnum sex, boolean shouldThrow,
             int exceptionsSize) {
+        // Arrange
         AthleteModel athlete = new AthleteModel(lastName, firstname, birthDate, sex);
-
+        
+        // Act & Assert
         if (shouldThrow) {
             AthleteValidationException exception = assertThrows(AthleteValidationException.class, () -> {
                 athleteController.saveAthlete(athlete);

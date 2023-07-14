@@ -6,8 +6,6 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-
-import Enum.PhysicalConditionEnum;
 import Model.ActivityModel;
 import Model.AthleteModel;
 
