@@ -109,8 +109,10 @@ class AthleteControllerTest {
     @MethodSource("provideDataForSaveUpdateAthlete")
     void testUpdateAthlete(String lastName, String firstname, Date birthDate, SexEnum sex, boolean shouldThrow,
             int exceptionsSize) {
+        // Arrange
         AthleteModel athlete = new AthleteModel(lastName, firstname, birthDate, sex);
 
+        // Act & Assert
         if (shouldThrow) {
             AthleteValidationException exception = assertThrows(AthleteValidationException.class, () -> {
                 athleteController.saveAthlete(athlete);
@@ -119,6 +121,34 @@ class AthleteControllerTest {
         } else {
             Assertions.assertDoesNotThrow(() -> {
                 athleteController.saveAthlete(athlete);
+            });
+        }
+    }
+
+    private static Stream<Arguments> provideDataForDeleteAthlete() {
+        return Stream.of(
+            Arguments.of(1l, false),
+            Arguments.of(2l, false),
+            Arguments.of(0l, true)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideDataForDeleteAthlete")
+    void testDeleteAthlete(long numberOfAtleteDeleted, boolean shouldThrow) {
+        // Arrange
+        ObjectId athleteId = new ObjectId();
+        when(athleteRepository.deleteAthlete(athleteId)).thenReturn(numberOfAtleteDeleted);
+
+        // Act & Assert
+        if (shouldThrow) {
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                athleteController.deleteAthlete(athleteId);
+            });
+            Assertions.assertEquals(exception.getMessage(), "No athlete matches the id : " + athleteId);
+        } else {
+            Assertions.assertDoesNotThrow(() -> {
+                athleteController.deleteAthlete(athleteId);
             });
         }
     }

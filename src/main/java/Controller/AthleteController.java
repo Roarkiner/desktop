@@ -50,7 +50,10 @@ public class AthleteController {
         athleteRepository.updateAthlete(athleteModel);
     }
 
-    public void deleteAthlete(ObjectId athleteId) {
-        athleteRepository.deleteAthlete(athleteId);
+    public void deleteAthlete(ObjectId athleteId) throws IllegalArgumentException {
+        long deletedAthlete = athleteRepository.deleteAthlete(athleteId);
+        if(deletedAthlete == 0) {
+            throw new IllegalArgumentException("No athlete matches the id : " + athleteId);
+        }
     }
 }
