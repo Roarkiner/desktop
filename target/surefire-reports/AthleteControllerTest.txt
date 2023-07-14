@@ -1,0 +1,66 @@
+-------------------------------------------------------------------------------
+Test set: AthleteControllerTest
+-------------------------------------------------------------------------------
+Tests run: 16, Failures: 14, Errors: 0, Skipped: 0, Time elapsed: 1.085 s <<< FAILURE! - in AthleteControllerTest
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[1]  Time elapsed: 0.371 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: exceptions.AthleteValidationException: There's validation exceptions
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:103)
+Caused by: exceptions.AthleteValidationException: There's validation exceptions
+	at AthleteControllerTest.lambda$testSaveAthlete$1(AthleteControllerTest.java:104)
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:103)
+
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[2]  Time elapsed: 0.015 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:98)
+
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[3]  Time elapsed: 0.011 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:98)
+
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[4]  Time elapsed: 0.009 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:98)
+
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[5]  Time elapsed: 0.01 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:98)
+
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[6]  Time elapsed: 0.009 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:98)
+
+testSaveAthlete{String, String, Date, SexEnum, boolean, int}[7]  Time elapsed: 0.008 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testSaveAthlete(AthleteControllerTest.java:98)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[1]  Time elapsed: 0.009 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: exceptions.AthleteValidationException: There's validation exceptions
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:121)
+Caused by: exceptions.AthleteValidationException: There's validation exceptions
+	at AthleteControllerTest.lambda$testUpdateAthlete$3(AthleteControllerTest.java:122)
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:121)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[2]  Time elapsed: 0.007 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:116)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[3]  Time elapsed: 0.009 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:116)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[4]  Time elapsed: 0.016 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:116)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[5]  Time elapsed: 0.016 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:116)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[6]  Time elapsed: 0.009 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:116)
+
+testUpdateAthlete{String, String, Date, SexEnum, boolean, int}[7]  Time elapsed: 0.01 s  <<< FAILURE!
+java.lang.AssertionError: expected exceptions.AthleteValidationException to be thrown, but nothing was thrown
+	at AthleteControllerTest.testUpdateAthlete(AthleteControllerTest.java:116)
+

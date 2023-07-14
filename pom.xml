@@ -31,15 +31,43 @@
         <version>1.2.6</version>
     </dependency>
     <dependency>
+        <groupId>jakarta.validation</groupId>
+        <artifactId>jakarta.validation-api</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+    <dependency>
         <groupId>org.mongodb</groupId>
         <artifactId>mongodb-driver-sync</artifactId>
         <version>4.7.1</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.8.1</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.8.1</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>5.8.1</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.platform</groupId>
+        <artifactId>junit-platform-runner</artifactId>
+        <version>1.8.1</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+        <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>

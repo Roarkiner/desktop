@@ -1,11 +1,17 @@
 package Controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 
 import Model.AthleteModel;
 import Repository.AthleteRepository;
+import exceptions.AthleteValidationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 public class AthleteController {
     private AthleteRepository athleteRepository;
@@ -22,11 +28,25 @@ public class AthleteController {
         return athleteRepository.getAllAthletes();
     }
 
-    public ObjectId saveAthlete(AthleteModel athleteModel) {
+    public ObjectId saveAthlete(AthleteModel athleteModel) throws AthleteValidationException {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<AthleteModel>> validationErrors = validator.validate(athleteModel);
+        if (!validationErrors.isEmpty()) {
+            throw new AthleteValidationException("There's validation exceptions", validationErrors);
+        }
+
         return athleteRepository.saveAthlete(athleteModel);
     }
 
-    public void updateAthlete(AthleteModel athleteModel) {
+    public void updateAthlete(AthleteModel athleteModel) throws AthleteValidationException {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<AthleteModel>> validationErrors = validator.validate(athleteModel);
+        if (!validationErrors.isEmpty()) {
+            throw new AthleteValidationException("There's validation exceptions", validationErrors);
+        }
+
         athleteRepository.updateAthlete(athleteModel);
     }
 

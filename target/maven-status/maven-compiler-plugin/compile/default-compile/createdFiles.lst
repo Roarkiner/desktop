@@ -1,4 +1,5 @@
 ApplicationContext.class
+exceptions\AthleteValidationException.class
 Repository\ActivityRepository.class
 Controller\ActivityController.class
 Controller\AthleteWorkoutInformationsController.class

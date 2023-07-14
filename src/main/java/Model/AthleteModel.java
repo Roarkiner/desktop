@@ -10,14 +10,30 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 import Enum.SexEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 public class AthleteModel {
     @BsonId
     private ObjectId id;
+
+    @NotBlank(message = "Last name is required")
+    @Size(max = 50, message = "Last name must be at most 100 characters")
     private String lastName;
+
+    @NotBlank(message = "First name is required")
+    @Size(max = 50, message = "First name must be at most 100 characters")
     private String firstName;
+
+    @NotNull(message = "Birth date is required")
+    @Past(message = "Birth date must be in the past")
     private Date birthDate;
+
+    @NotNull(message = "Sex is required")
     private SexEnum sex;
+
     private List<ActivityModel> activities;
 
     @BsonCreator
