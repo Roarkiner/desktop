@@ -19,19 +19,19 @@ public class AthleteModel {
     @BsonId
     private ObjectId id;
 
-    @NotBlank(message = "Last name is required")
-    @Size(max = 50, message = "Last name must be at most 100 characters")
+    @NotBlank(message = "Le nom de famille est obligatoire")
+    @Size(max = 50, message = "Le nom de famille doit faire au maximum 50 caractères")
     private String lastName;
 
-    @NotBlank(message = "First name is required")
-    @Size(max = 50, message = "First name must be at most 100 characters")
+    @NotBlank(message = "Le prénom est obligatoire")
+    @Size(max = 50, message = "Le prénom doit faire au maximum 50 caractères")
     private String firstName;
 
-    @NotNull(message = "Birth date is required")
-    @Past(message = "Birth date must be in the past")
+    @NotNull(message = "La date de naissance est obligatoire")
+    @Past(message = "La date de naissance ne peut pas être dans le futur")
     private Date birthDate;
 
-    @NotNull(message = "Sex is required")
+    @NotNull(message = "Le sexe est requis")
     private SexEnum sex;
 
     private List<ActivityModel> activities;
