@@ -200,8 +200,7 @@ class ActivityControllerTest {
         return Stream.of(
                 Arguments.of(1, false),
                 Arguments.of(2, false),
-                Arguments.of(4, true)
-        );
+                Arguments.of(4, true));
     }
 
     @ParameterizedTest
