@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -200,6 +201,7 @@ class ActivityControllerTest {
         return Stream.of(
                 Arguments.of(1, false),
                 Arguments.of(2, false),
+                Arguments.of(3, false),
                 Arguments.of(4, true));
     }
 
@@ -216,11 +218,11 @@ class ActivityControllerTest {
         // Act && Assert
         if (shouldThrow) {
             Assertions.assertThrows(NotEnoughActivitiesException.class, () -> {
-                activityController.getActivitiesFromPastWeeks(Collections.emptyList(), numberOfWeeks);
+                activityController.getActivitiesFromPastWeeksPerDay(Collections.emptyList(), numberOfWeeks);
             });
         } else {
-            List<ActivityModel> result = Assertions.assertDoesNotThrow(() -> {
-                return activityController.getActivitiesFromPastWeeks(activities, numberOfWeeks);
+            List<List<ActivityModel>> result = Assertions.assertDoesNotThrow(() -> {
+                return activityController.getActivitiesFromPastWeeksPerDay(activities, numberOfWeeks);
             });
 
             Assertions.assertEquals(numberOfWeeks, result.size());
@@ -229,6 +231,26 @@ class ActivityControllerTest {
 
     private static Date toDate(LocalDate localDate) {
         return java.sql.Date.valueOf(localDate);
+    }
+
+    @Test
+    void testGroupActivitiesByDay() {
+        // Arrange
+        List<ActivityModel> activities = new ArrayList<>();
+        activities.add(new ActivityModel("Activity 1", 10.0, toDate(LocalDate.now()), 1.0));
+        activities.add(new ActivityModel("Activity 2", 10.0, toDate(LocalDate.now()), 1.0));
+        activities.add(new ActivityModel("Activity 3", 10.0, toDate(LocalDate.now().plusDays(1)), 1.0));
+
+        // Act
+        List<List<ActivityModel>> result = activityController.groupActivitiesByDay(activities);
+
+        // Assert
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(2, result.get(0).size());
+        Assertions.assertEquals("Activity 1", result.get(0).get(0).getName());
+        Assertions.assertEquals("Activity 2", result.get(0).get(1).getName());
+        Assertions.assertEquals(1, result.get(1).size());
+        Assertions.assertEquals("Activity 3", result.get(1).get(0).getName());
     }
 
     @Test
@@ -247,16 +269,42 @@ class ActivityControllerTest {
     @Test
     void calculateSumOfLoadsOfActivities() {
         // Arrange
-        List<ActivityModel> activities = new ArrayList<>();
-        activities.add(new ActivityModel("Activity 1", 10.0, new Date(), 1.0, 10.0));
-        activities.add(new ActivityModel("Activity 2", 10.0, new Date(), 1.0, 10.0));
-        activities.add(new ActivityModel("Activity 3", 10.0, new Date(), 1.0, 10.0));
-        activities.add(new ActivityModel("Activity 4", 10.0, new Date(), 1.0, 10.0));
+        List<List<ActivityModel>> activitiesPerDays = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        activitiesPerDays.add(
+                Arrays.asList(
+                        new ActivityModel("Activity 1", 10, calendar.getTime(), 1, 10)));
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        activitiesPerDays.add(
+                Arrays.asList(
+                        new ActivityModel("Activity 2", 10, calendar.getTime(), 1, 10)));
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        activitiesPerDays.add(
+                Arrays.asList(
+                        new ActivityModel("Activity 3", 10, calendar.getTime(), 1, 10)));
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        activitiesPerDays.add(
+                Arrays.asList(
+                        new ActivityModel("Activity 4", 10, calendar.getTime(), 1, 10)));
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        activitiesPerDays.add(
+                Arrays.asList(
+                        new ActivityModel("Activity 5", 10, calendar.getTime(), 1, 10)));
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        activitiesPerDays.add(
+                Arrays.asList(
+                        new ActivityModel("Activity 6", 10, calendar.getTime(), 1, 10)));
 
         // Act
-        double result = activityController.calculateSumOfLoadsOfActivities(activities);
+        double result = activityController.calculateSumOfLoadsOfActivities(activitiesPerDays);
 
         // Assert
-        Assertions.assertEquals(40.0, result);
+        Assertions.assertEquals(60.0, result);
     }
 }
