@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 
-import Model.ActivityModel;
-import Repository.ActivityRepository;
+import model.ActivityModel;
+import repository.ActivityRepository;
 import exceptions.ActivityValidationException;
 import exceptions.NotEnoughActivitiesException;
 import jakarta.validation.ConstraintViolation;
@@ -130,7 +130,14 @@ public class ActivityController {
             activityMap.put(localDate, dayActivities);
         }
 
-        return new ArrayList<>(activityMap.values());
+        for (List<ActivityModel> dayActivities : activityMap.values()) {
+            dayActivities.sort(Comparator.comparing(ActivityModel::getDate));
+        }
+
+        List<List<ActivityModel>> sortedActivities = new ArrayList<>(activityMap.values());
+        sortedActivities.sort(Comparator.comparing(o -> o.get(0).getDate()));
+
+        return sortedActivities;
     }
 
     public double calculateLoad(double duration, double rpe) {

@@ -16,10 +16,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import Controller.AthleteController;
-import Enum.SexEnum;
-import Model.AthleteModel;
-import Repository.AthleteRepository;
+import controller.AthleteController;
+import enums.SexEnum;
+import model.AthleteModel;
+import repository.AthleteRepository;
 import exceptions.AthleteValidationException;
 
 class AthleteControllerTest {
@@ -64,7 +64,7 @@ class AthleteControllerTest {
         when(athleteRepository.getAllAthletes()).thenReturn(mockAthletes);
 
         // Act
-        List<AthleteModel> result = athleteController.getAllActivities();
+        List<AthleteModel> result = athleteController.getAllAthletes();
 
         // Assert
         verify(athleteRepository).getAllAthletes();

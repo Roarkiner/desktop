@@ -1,10 +1,10 @@
-package Controller;
+package controller;
 
 import java.util.List;
 
-import Enum.PhysicalConditionEnum;
-import Model.ActivityModel;
-import Model.AthleteWorkoutInformationsModel;
+import enums.PhysicalConditionEnum;
+import model.ActivityModel;
+import model.AthleteWorkoutInformationsModel;
 import exceptions.NotEnoughActivitiesException;
 
 public class AthleteWorkoutInformationsController {

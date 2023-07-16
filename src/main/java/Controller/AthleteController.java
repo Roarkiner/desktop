@@ -1,12 +1,12 @@
-package Controller;
+package controller;
 
 import java.util.List;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
 
-import Model.AthleteModel;
-import Repository.AthleteRepository;
+import model.AthleteModel;
+import repository.AthleteRepository;
 import exceptions.AthleteValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -20,11 +20,12 @@ public class AthleteController {
         this.athleteRepository = athleteRepository;
     }
 
+
     public AthleteModel getAthleteById(ObjectId athleteId) {
         return athleteRepository.getAthlete(athleteId);
     }
 
-    public List<AthleteModel> getAllActivities() {
+    public List<AthleteModel> getAllAthletes() {
         return athleteRepository.getAllAthletes();
     }
 

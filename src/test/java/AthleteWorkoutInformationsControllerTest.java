@@ -15,11 +15,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import Controller.ActivityController;
-import Controller.AthleteWorkoutInformationsController;
-import Enum.PhysicalConditionEnum;
-import Model.ActivityModel;
-import Model.AthleteWorkoutInformationsModel;
+import controller.ActivityController;
+import controller.AthleteWorkoutInformationsController;
+import enums.PhysicalConditionEnum;
+import model.ActivityModel;
+import model.AthleteWorkoutInformationsModel;
 import exceptions.NotEnoughActivitiesException;
 
 class AthleteWorkoutInformationsControllerTest {

@@ -1,4 +1,4 @@
-package Repository;
+package repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import Model.ActivityModel;
-import Model.AthleteModel;
+import model.ActivityModel;
+import model.AthleteModel;
 
 public class ActivityRepository {
 

@@ -1,4 +1,4 @@
-package Repository;
+package repository;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
@@ -7,7 +7,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import Model.AthleteModel;
+import model.AthleteModel;
 import java.util.ArrayList;
 import java.util.List;
 

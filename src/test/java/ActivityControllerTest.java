@@ -20,9 +20,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import Controller.ActivityController;
-import Model.ActivityModel;
-import Repository.ActivityRepository;
+import controller.ActivityController;
+import model.ActivityModel;
+import repository.ActivityRepository;
 import exceptions.ActivityValidationException;
 import exceptions.NotEnoughActivitiesException;
 
