@@ -1,12 +1,9 @@
 package view;
 
 import javax.swing.*;
-
 import org.bson.types.ObjectId;
 import shared.NavigationListener;
-
 import com.toedter.calendar.JDateChooser;
-
 import controller.AthleteController;
 import enums.NavigationRouteEnum;
 import enums.SexEnum;
@@ -14,7 +11,6 @@ import exceptions.AthleteValidationException;
 import jakarta.validation.ConstraintViolation;
 import model.AthleteModel;
 import shared.DesktopApplicationContext;
-
 import java.awt.*;
 import java.util.Date;
 import java.util.Set;
@@ -55,11 +51,13 @@ public class RegisterPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 10, 10, 10);
 
         // Firstname
         firstnameLabel = new JLabel("Firstname:");
         firstnameField = new JTextField(20);
+        firstnameLabel.setFont(firstnameLabel.getFont().deriveFont(Font.BOLD, 16f));
+        firstnameField.setFont(firstnameField.getFont().deriveFont(Font.PLAIN, 16f));
         add(firstnameLabel, gbc);
         gbc.gridy++;
         add(firstnameField, gbc);
@@ -68,14 +66,21 @@ public class RegisterPanel extends JPanel {
         // Lastname
         lastnameLabel = new JLabel("Lastname:");
         lastnameField = new JTextField(20);
+        lastnameLabel.setFont(lastnameLabel.getFont().deriveFont(Font.BOLD, 16f));
+        lastnameField.setFont(lastnameField.getFont().deriveFont(Font.PLAIN, 16f));
         add(lastnameLabel, gbc);
         gbc.gridy++;
         add(lastnameField, gbc);
         gbc.gridy++;
-
+        
         // Birthdate
         birthdateLabel = new JLabel("Birthdate:");
-        birthdateChooser = new JDateChooser(); // Create a new JDateChooser instance
+        birthdateChooser = new JDateChooser();
+        birthdateLabel.setFont(birthdateLabel.getFont().deriveFont(Font.BOLD, 16f));
+        birthdateChooser.setFont(birthdateChooser.getFont().deriveFont(Font.PLAIN, 16f));
+        Dimension birthdateChooserSize = birthdateChooser.getPreferredSize();
+        birthdateChooserSize.height = 26;
+        birthdateChooser.setPreferredSize(birthdateChooserSize);
         add(birthdateLabel, gbc);
         gbc.gridy++;
         add(birthdateChooser, gbc);
@@ -97,6 +102,10 @@ public class RegisterPanel extends JPanel {
         sexPanel.add(maleButton);
         sexPanel.add(femaleButton);
         sexPanel.add(undefinedButton);
+        sexLabel.setFont(sexLabel.getFont().deriveFont(Font.BOLD, 16f));
+        maleButton.setPreferredSize(new Dimension(40, 40));
+        femaleButton.setPreferredSize(new Dimension(40, 40));
+        undefinedButton.setPreferredSize(new Dimension(40, 40));
         add(sexLabel, gbc);
         gbc.gridy++;
         add(sexPanel, gbc);
@@ -105,6 +114,7 @@ public class RegisterPanel extends JPanel {
         // Register button
         registerButton = new JButton("Register");
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 0, 0, 0);
         add(registerButton, gbc);
 
         maleButton.setFocusPainted(false);
@@ -144,7 +154,7 @@ public class RegisterPanel extends JPanel {
             });
             futureUserId.thenAccept(userId -> {
                 context.connectNewUser(userId);
-                navigationListener.navigateTo(NavigationRouteEnum.WORKOUTINFO.toString());
+                navigationListener.navigateTo(NavigationRouteEnum.WORKOUTINFO);
             }).exceptionally(exception -> {
                 Throwable cause = exception.getCause();
                 if (cause instanceof AthleteValidationException) {
@@ -154,12 +164,11 @@ public class RegisterPanel extends JPanel {
                         showErrorDialog(constraintViolation.getMessage());
                     }
                 } else {
-                    showErrorDialog("An error occurred while saving the athlete.");
+                    showErrorDialog("Une erreur s'est produite lors de l'enregistrement de l'athlete.");
                 }
                 return null;
             });
         });
-
     }
 
     private void updateSexButtonAppearance() {

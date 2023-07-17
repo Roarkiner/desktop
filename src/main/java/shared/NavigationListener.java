@@ -1,5 +1,7 @@
 package shared;
 
+import enums.NavigationRouteEnum;
+
 public interface NavigationListener {
-    void navigateTo(String page);
+    void navigateTo(NavigationRouteEnum page);
 }

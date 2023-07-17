@@ -17,6 +17,7 @@ public class ActivityRepository {
 
     public ActivityRepository(MongoCollection<AthleteModel> athleteCollection, ObjectId athleteId) {
         this.athleteCollection = athleteCollection;
+        this.athleteRepository = new AthleteRepository(athleteCollection);
         this.athleteId = athleteId;
     }
 

@@ -8,8 +8,11 @@ import controller.AthleteController;
 import enums.NavigationRouteEnum;
 import model.AthleteModel;
 import shared.DesktopApplicationContext;
+import view.ActivityListPanel;
+import view.LoadingScreenPanel;
+import view.NewActivityPanel;
 import view.RegisterPanel;
-import view.WorkoutInfoPanel;
+import view.WorkoutInfosPanel;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -32,40 +35,54 @@ public class App {
         cardLayout = new CardLayout();
         mainPanel.setLayout(cardLayout);
 
-        RegisterPanel registerPanel = new RegisterPanel();
-        registerPanel.setNavigationListener(page -> cardLayout.show(mainPanel, page));
-
-        mainPanel.add(NavigationRouteEnum.REGISTER.toString(), registerPanel);
-        mainPanel.add(NavigationRouteEnum.WORKOUTINFO.toString(), new WorkoutInfoPanel());
-        // mainPanel.add(NavigationRouteEnum.USERDETAILS.toString(), new
-        // UserDetailsPanel());
-        // mainPanel.add(NavigationRouteEnum.ACTIVITYLIST.toString(), new
-        // ActivityListPanel());
-        // mainPanel.add(NavigationRouteEnum.NEWACTIVITY.toString(), new
-        // NewActivityPanel());
-
-        cardLayout.show(mainPanel, NavigationRouteEnum.REGISTER.toString());
+        mainPanel.add(NavigationRouteEnum.LOADING.toString(), new LoadingScreenPanel());
 
         frame.add(mainPanel);
-        frame.setPreferredSize(new Dimension(800, 600));
+        frame.setPreferredSize(new Dimension(1200, 800));
         frame.pack();
         frame.setVisible(true);
     }
 
-    public void navigateTo(String page) {
-        cardLayout.show(mainPanel, page);
+   public void navigateTo(NavigationRouteEnum page) {
+        switch (page) {
+            case REGISTER:
+                RegisterPanel registerPanel = new RegisterPanel();
+                registerPanel.setNavigationListener(this::navigateTo);
+                mainPanel.add(NavigationRouteEnum.REGISTER.toString(), registerPanel);
+                break;
+            case WORKOUTINFO:
+                WorkoutInfosPanel workoutInfoPanel = new WorkoutInfosPanel();
+                workoutInfoPanel.setNavigationListener(this::navigateTo);
+                mainPanel.add(NavigationRouteEnum.WORKOUTINFO.toString(), workoutInfoPanel);
+                break;
+            case ACTIVITYLIST:
+                ActivityListPanel activityListPanel = new ActivityListPanel();
+                activityListPanel.setNavigationListener(this::navigateTo);
+                mainPanel.add(NavigationRouteEnum.ACTIVITYLIST.toString(), activityListPanel);
+                break;
+            case NEWACTIVITY:
+                NewActivityPanel newActivityPanel = new NewActivityPanel();
+                newActivityPanel.setNavigationListener(this::navigateTo);
+                mainPanel.add(NavigationRouteEnum.NEWACTIVITY.toString(), newActivityPanel);
+                break;
+            default:
+                break;
+        }
+        
+        cardLayout.show(mainPanel, page.toString());
     }
-    
+
     public static void main(String[] args) {
         App app = new App();
         DesktopApplicationContext context = DesktopApplicationContext.getInstance();
         AthleteController athleteController = context.getAthleteController();
-        CompletableFuture<List<AthleteModel>> futureAthletes = CompletableFuture.supplyAsync(athleteController::getAllAthletes);
-        
+        CompletableFuture<List<AthleteModel>> futureAthletes = CompletableFuture
+                .supplyAsync(athleteController::getAllAthletes);
+
         futureAthletes.thenAccept(athletes -> {
             if (athletes.size() == 1) {
                 context.connectNewUser(athletes.get(0).getId());
-                app.navigateTo(NavigationRouteEnum.WORKOUTINFO.toString());
+                app.navigateTo(NavigationRouteEnum.ACTIVITYLIST);
             } else {
                 List<CompletableFuture<Void>> deleteFutures = new ArrayList<>();
                 for (AthleteModel athlete : athletes) {
@@ -78,15 +95,18 @@ public class App {
                     });
                     deleteFutures.add(deleteFuture);
                 }
-                
-                CompletableFuture<Void> allDeletesFuture = CompletableFuture.allOf(deleteFutures.toArray(new CompletableFuture[0]));
-                allDeletesFuture.thenRun(() -> {
-                    app.navigateTo(NavigationRouteEnum.REGISTER.toString());
-                }).exceptionally(ex -> {
-                    logger.error("An error occures", ex);
-                    return null;
-                });
+
+                CompletableFuture<Void> allDeletesFuture = CompletableFuture
+                        .allOf(deleteFutures.toArray(new CompletableFuture[0]));
+                allDeletesFuture.thenRun(() -> app.navigateTo(NavigationRouteEnum.REGISTER))
+                        .exceptionally(ex -> {
+                            logger.error("An error occured", ex);
+                            return null;
+                        });
             }
+        }).exceptionally(ex -> {
+            logger.error("An error occured", ex);
+            return null;
         });
     }
 }

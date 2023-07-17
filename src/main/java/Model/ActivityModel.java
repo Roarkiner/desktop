@@ -36,7 +36,6 @@ public class ActivityModel {
     @DecimalMax(value = "10", message = "Le RPE doit être compris entre 1 et 10")
     private Double rpe;
 
-    @NotNull(message = "La charge est obligatoire")
     private Double load;
 
     @BsonCreator
@@ -55,9 +54,9 @@ public class ActivityModel {
 
     public ActivityModel(
             String name,
-            double duration,
+            Double duration,
             Date date,
-            double rpe) {
+            Double rpe) {
         this.name = name;
         this.duration = duration;
         this.date = date;

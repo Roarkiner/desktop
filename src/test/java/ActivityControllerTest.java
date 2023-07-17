@@ -209,11 +209,17 @@ class ActivityControllerTest {
     @MethodSource("provideDataForGetActivitiesFromPastWeeks")
     void getActivitiesFromPastWeeks(int numberOfWeeks, boolean shouldThrow) {
         // Arrange
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+        calendar.add(Calendar.WEEK_OF_YEAR, -3);
         List<ActivityModel> activities = new ArrayList<>();
-        activities.add(new ActivityModel("Activity 1", 10.0, toDate(LocalDate.now().minusDays(21)), 1.0));
-        activities.add(new ActivityModel("Activity 2", 10.0, toDate(LocalDate.now().minusDays(14)), 1.0));
-        activities.add(new ActivityModel("Activity 3", 10.0, toDate(LocalDate.now().minusDays(7)), 1.0));
-        activities.add(new ActivityModel("Activity 4", 10.0, toDate(LocalDate.now()), 1.0));
+        activities.add(new ActivityModel("Activity 1", 10.0, calendar.getTime(), 1.0));
+        calendar.add(Calendar.WEEK_OF_YEAR, +1);
+        activities.add(new ActivityModel("Activity 2", 10.0, calendar.getTime(), 1.0));
+        calendar.add(Calendar.WEEK_OF_YEAR, +1);
+        activities.add(new ActivityModel("Activity 3", 10.0, calendar.getTime(), 1.0));
+        calendar.add(Calendar.WEEK_OF_YEAR, +1);
+        activities.add(new ActivityModel("Activity 4", 10.0, calendar.getTime(), 1.0));
 
         // Act && Assert
         if (shouldThrow) {

@@ -1,4 +1,16 @@
 -------------------------------------------------------------------------------
 Test set: ActivityControllerTest
 -------------------------------------------------------------------------------
-Tests run: 30, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.943 s - in ActivityControllerTest
+Tests run: 30, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.995 s <<< FAILURE! - in ActivityControllerTest
+getActivitiesFromPastWeeks{int, boolean}[1]  Time elapsed: 0.009 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
+	at ActivityControllerTest.getActivitiesFromPastWeeks(ActivityControllerTest.java:228)
+
+getActivitiesFromPastWeeks{int, boolean}[2]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <2> but was: <1>
+	at ActivityControllerTest.getActivitiesFromPastWeeks(ActivityControllerTest.java:228)
+
+getActivitiesFromPastWeeks{int, boolean}[3]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <3> but was: <2>
+	at ActivityControllerTest.getActivitiesFromPastWeeks(ActivityControllerTest.java:228)
+

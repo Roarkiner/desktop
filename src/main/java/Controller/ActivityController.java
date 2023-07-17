@@ -33,34 +33,36 @@ public class ActivityController {
     }
 
     public List<ActivityModel> getAllActivities() {
-        return activityRepository.getAllActivities();
+        List<ActivityModel> activities = activityRepository.getAllActivities();
+        activities.sort(Comparator.comparing(ActivityModel::getDate));
+        return activities;
     }
 
     public ObjectId saveActivity(ActivityModel activityModel) throws ActivityValidationException {
-        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
-        activityModel.setLoad(load);
-
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<ActivityModel>> validationErrors = validator.validate(activityModel);
         if (!validationErrors.isEmpty()) {
             throw new ActivityValidationException("There's validation exceptions", validationErrors);
         }
+
+        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
+        activityModel.setLoad(load);
 
         return activityRepository.saveActivity(activityModel);
     }
 
     public void updateActivity(ActivityModel activityModel) throws ActivityValidationException {
-        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
-        activityModel.setLoad(load);
-
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<ActivityModel>> validationErrors = validator.validate(activityModel);
         if (!validationErrors.isEmpty()) {
             throw new ActivityValidationException("There's validation exceptions", validationErrors);
         }
-
+        
+        double load = calculateLoad(activityModel.getDuration(), activityModel.getRpe());
+        activityModel.setLoad(load);
+        
         activityRepository.updateActivity(activityModel);
     }
 
