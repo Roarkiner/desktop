@@ -91,6 +91,14 @@ public class WorkoutInfosPanel extends JPanel {
         };
         physicalConditionPanel.setPreferredSize(new Dimension(150, 150));
 
+        JLabel physicalConditionLabel = new JLabel(getLabelTextForPhysicalCondition(currentPhysicalCondition));
+        physicalConditionLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JPanel physicalConditionInfoPanel = new JPanel();
+        physicalConditionInfoPanel.setLayout(new BorderLayout());
+        physicalConditionInfoPanel.add(physicalConditionPanel, BorderLayout.WEST);
+        physicalConditionInfoPanel.add(physicalConditionLabel, BorderLayout.CENTER);
+
         errorLabel = new JLabel();
         errorLabel.setFont(new Font(arialFont, Font.BOLD, 16));
         errorPanel = new JPanel(new BorderLayout());
@@ -104,7 +112,7 @@ public class WorkoutInfosPanel extends JPanel {
         add(constraintLabel);
         add(fitnessLabel);
         add(awcrLabel);
-        add(physicalConditionPanel);
+        add(physicalConditionInfoPanel);
         add(errorPanel);
 
         if (contextAthleteWorkoutInformationsController != null) {
@@ -173,6 +181,21 @@ public class WorkoutInfosPanel extends JPanel {
                 return Color.GRAY;
             default:
                 return Color.WHITE;
+        }
+    }
+
+    private String getLabelTextForPhysicalCondition(PhysicalConditionEnum physicalCondtion) {
+        switch (physicalCondtion) {
+            case OPTIMAL:
+                return "Optimal";
+            case EXHAUSTING:
+                return "Fatiguant";
+            case DANGEROUS:
+                return "Dangereux";
+            case RAS:
+                return "RAS";
+            default:
+                return "RAS";
         }
     }
 
