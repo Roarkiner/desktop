@@ -1,9 +1,6 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-
-import org.springframework.boot.autoconfigure.security.saml2.Saml2RelyingPartyProperties.AssertingParty.Verification;
 
 import controller.AthleteWorkoutInformationsController;
 import enums.NavigationRouteEnum;
@@ -49,7 +46,7 @@ public class WorkoutInfosPanel extends JPanel {
         activityListButton.setFocusPainted(false);
         activityListButton.addActionListener(e -> {
             if (navigationListener != null) {
-                navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST);
+                navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST, null);
             }
         });
 
@@ -60,7 +57,7 @@ public class WorkoutInfosPanel extends JPanel {
         totalLoadLabel = new JLabel();
         totalLoadLabel.setFont(new Font(arialFont, Font.PLAIN, 16));
         totalLoadLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         monotonyLabel = new JLabel();
         monotonyLabel.setFont(new Font(arialFont, Font.PLAIN, 16));
         monotonyLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -99,7 +96,7 @@ public class WorkoutInfosPanel extends JPanel {
         errorPanel = new JPanel(new BorderLayout());
         errorPanel.add(errorLabel, BorderLayout.CENTER);
         errorPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
+
         add(activityListButton);
         add(titleLabel);
         add(totalLoadLabel);
@@ -140,6 +137,9 @@ public class WorkoutInfosPanel extends JPanel {
 
         removeAll();
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.add(activityListButton);
+        add(buttonPanel, BorderLayout.NORTH);
         add(errorPanel, BorderLayout.CENTER);
 
         revalidate();
@@ -155,11 +155,10 @@ public class WorkoutInfosPanel extends JPanel {
             awcrLabel.setText("Il faut au minimum un mois d'entrainement pour pouvoir calculer le RCA");
         } else {
             awcrLabel.setText("RCA: " + workoutInformations.getAwcr());
+            PhysicalConditionEnum physicalCondition = getPhysicalCondition(workoutInformations);
+            currentPhysicalCondition = physicalCondition;
+            physicalConditionPanel.repaint();
         }
-
-        PhysicalConditionEnum physicalCondition = getPhysicalCondition(workoutInformations);
-        currentPhysicalCondition = physicalCondition;
-        physicalConditionPanel.repaint();
     }
 
     private Color getColorForPhysicalCondition(PhysicalConditionEnum physicalCondtion) {

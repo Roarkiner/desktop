@@ -6,6 +6,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
+
 import model.ActivityModel;
 import model.AthleteModel;
 
@@ -50,10 +52,17 @@ public class ActivityRepository {
     }
 
     public void updateActivity(ActivityModel activityModel) {
-        Document update = new Document("$set", new Document("activities.$", activityModel));
-        athleteCollection.updateOne(Filters.and(
-                Filters.eq("_id", athleteId),
-                Filters.eq("activities.activityId", activityModel.getActivityId())), update);
+        Document filter = new Document("_id", athleteId)
+                .append("activities",
+                        new Document("$elemMatch", new Document("activityId", activityModel.getActivityId())));
+
+        Document update = new Document("$set",
+                new Document("activities.$.name", activityModel.getName())
+                        .append("activities.$.duration", activityModel.getDuration())
+                        .append("activities.$.date", activityModel.getDate())
+                        .append("activities.$.rpe", activityModel.getRpe()));
+
+        athleteCollection.updateOne(filter, update);
     }
 
     public void deleteActivity(ObjectId activityId) {

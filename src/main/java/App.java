@@ -2,6 +2,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 
 import controller.AthleteController;
@@ -10,6 +11,7 @@ import model.AthleteModel;
 import shared.DesktopApplicationContext;
 import view.ActivityListPanel;
 import view.LoadingScreenPanel;
+import view.ModifyActivityPanel;
 import view.NewActivityPanel;
 import view.RegisterPanel;
 import view.WorkoutInfosPanel;
@@ -43,7 +45,7 @@ public class App {
         frame.setVisible(true);
     }
 
-   public void navigateTo(NavigationRouteEnum page) {
+   public void navigateTo(NavigationRouteEnum page, ObjectId objectId) {
         switch (page) {
             case REGISTER:
                 RegisterPanel registerPanel = new RegisterPanel();
@@ -65,6 +67,11 @@ public class App {
                 newActivityPanel.setNavigationListener(this::navigateTo);
                 mainPanel.add(NavigationRouteEnum.NEWACTIVITY.toString(), newActivityPanel);
                 break;
+            case MODIFYACTIVITY:
+                ModifyActivityPanel modifyActivityPanel = new ModifyActivityPanel(objectId);
+                modifyActivityPanel.setNavigationListener(this::navigateTo);
+                mainPanel.add(NavigationRouteEnum.MODIFYACTIVITY.toString(), modifyActivityPanel);
+                break;
             default:
                 break;
         }
@@ -82,7 +89,7 @@ public class App {
         futureAthletes.thenAccept(athletes -> {
             if (athletes.size() == 1) {
                 context.connectNewUser(athletes.get(0).getId());
-                app.navigateTo(NavigationRouteEnum.ACTIVITYLIST);
+                app.navigateTo(NavigationRouteEnum.ACTIVITYLIST, null);
             } else {
                 List<CompletableFuture<Void>> deleteFutures = new ArrayList<>();
                 for (AthleteModel athlete : athletes) {
@@ -98,7 +105,7 @@ public class App {
 
                 CompletableFuture<Void> allDeletesFuture = CompletableFuture
                         .allOf(deleteFutures.toArray(new CompletableFuture[0]));
-                allDeletesFuture.thenRun(() -> app.navigateTo(NavigationRouteEnum.REGISTER))
+                allDeletesFuture.thenRun(() -> app.navigateTo(NavigationRouteEnum.REGISTER, null))
                         .exceptionally(ex -> {
                             logger.error("An error occured", ex);
                             return null;

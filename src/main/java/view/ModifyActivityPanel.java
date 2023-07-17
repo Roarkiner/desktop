@@ -20,7 +20,7 @@ import model.ActivityModel;
 import shared.DesktopApplicationContext;
 import shared.NavigationListener;
 
-public class NewActivityPanel extends JPanel {
+public class ModifyActivityPanel extends JPanel {
     private JButton backButton;
     private JLabel titleLabel;
     private JLabel nameLabel;
@@ -31,12 +31,12 @@ public class NewActivityPanel extends JPanel {
     private JDateChooser dateChooser;
     private JLabel sliderLabel;
     private JSlider slider;
-    private JButton createButton;
+    private JButton modifyButton;
 
     private transient NavigationListener navigationListener;
     private String arialFont = "Arial";
 
-    public NewActivityPanel() {
+    public ModifyActivityPanel(ObjectId activityId) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -58,7 +58,7 @@ public class NewActivityPanel extends JPanel {
         });
 
         // Title
-        titleLabel = new JLabel("Ajouter une activité");
+        titleLabel = new JLabel("Modifier une activité");
         titleLabel.setFont(new Font(arialFont, Font.BOLD, 40));
         add(titleLabel, gbc);
         gbc.gridy++;
@@ -111,55 +111,74 @@ public class NewActivityPanel extends JPanel {
         add(slider, gbc);
         gbc.gridy++;
 
-        // Create button
-        createButton = new JButton("Créer");
-        createButton.setFocusPainted(false);
-        createButton.setFont(new Font(arialFont, Font.BOLD, 22));
+        // Modify button
+        modifyButton = new JButton("Modifier");
+        modifyButton.setFocusPainted(false);
+        modifyButton.setFont(new Font(arialFont, Font.BOLD, 22));
         gbc.anchor = GridBagConstraints.CENTER;
-        add(createButton, gbc);
-
-        createButton.addActionListener(e -> {
+        add(modifyButton, gbc);
+        
+        modifyButton.addActionListener(e -> {
             String name = nameField.getText();
             Double duration = "".equals(durationField.getText()) ? null : Double.parseDouble(durationField.getText());
             java.util.Date date = dateChooser.getDate();
             Double rpe = slider.getValue() / 2.0;
-
+            
             DesktopApplicationContext context = DesktopApplicationContext.getInstance();
             ActivityModel activity = new ActivityModel(name, duration, date, rpe);
             ActivityController activityController = context.getActivityController();
-            CompletableFuture<ObjectId> futureActivityId = CompletableFuture.supplyAsync(() -> {
+            CompletableFuture<Void> futureActivityId = CompletableFuture.runAsync(() -> {
                 try {
-                    return activityController.saveActivity(activity);
+                    activityController.updateActivity(activity);
                 } catch (ActivityValidationException exception) {
                     throw new CompletionException(exception);
                 }
             });
-            futureActivityId.thenAccept(activityId -> {
-                navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST, null);
-            }).exceptionally(exception -> {
+            futureActivityId.thenRun(() -> navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST, null))
+            .exceptionally(exception -> {
                 Throwable cause = exception.getCause();
                 if (cause instanceof ActivityValidationException) {
                     Set<ConstraintViolation<ActivityModel>> validationErrors = ((ActivityValidationException) cause)
-                            .getValidationErrors();
+                    .getValidationErrors();
                     for (ConstraintViolation<ActivityModel> constraintViolation : validationErrors) {
                         showErrorDialog(constraintViolation.getMessage());
                     }
                 } else {
-                    showErrorDialog("Une erreur s'est produite lors de l'ajout de l'activité.");
+                    showErrorDialog("Une erreur s'est produite lors de la modification de l'activité.");
                 }
                 return null;
             });
         });
-    }
 
+        CompletableFuture<ActivityModel> futureActivity = CompletableFuture.supplyAsync(() -> {
+            DesktopApplicationContext context = DesktopApplicationContext.getInstance();
+            ActivityController activityController = context.getActivityController();
+            try {
+                return activityController.getActivityById(activityId);
+            } catch (Exception exception) {
+                throw new CompletionException(exception);
+            }
+        });
+    
+        futureActivity.thenAccept(activity -> {
+            nameField.setText(activity.getName());
+            durationField.setText(String.valueOf(activity.getDuration()));
+            dateChooser.setDate(activity.getDate());
+            slider.setValue((int) (activity.getRpe() * 2));
+        }).exceptionally(exception -> {
+            showErrorDialog("Une erreur s'est produite lors de la récupération de l'activité.");
+            return null;
+        });
+    }
+    
     public void setNavigationListener(NavigationListener navigationListener) {
         this.navigationListener = navigationListener;
     }
-
+    
     private void showErrorDialog(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage, "Validation Error", JOptionPane.ERROR_MESSAGE);
     }
-
+    
     private Hashtable<Integer, JLabel> createSliderLabels() {
         Hashtable<Integer, JLabel> labels = new Hashtable<>();
 

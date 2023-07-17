@@ -41,7 +41,7 @@ public class ActivityListPanel extends JPanel {
         workoutInfosNavigateButton.setFocusPainted(false);
         workoutInfosNavigateButton.addActionListener(e -> {
             if (navigationListener != null) {
-                navigationListener.navigateTo(NavigationRouteEnum.WORKOUTINFO);
+                navigationListener.navigateTo(NavigationRouteEnum.WORKOUTINFO, null);
             }
         });
         topPanel.add(workoutInfosNavigateButton, BorderLayout.WEST);
@@ -66,7 +66,7 @@ public class ActivityListPanel extends JPanel {
         addActivityButton.setFocusPainted(false);
         addActivityButton.addActionListener(e -> {
             if (navigationListener != null) {
-                navigationListener.navigateTo(NavigationRouteEnum.NEWACTIVITY);
+                navigationListener.navigateTo(NavigationRouteEnum.NEWACTIVITY, null);
             }
         });
 
@@ -124,7 +124,8 @@ public class ActivityListPanel extends JPanel {
 
         for (ActivityModel activity : activities) {
             JPanel activityPanel = createActivityPanel(activity);
-            activityPanel.setPreferredSize(new Dimension(WIDTH, 200));
+            activityPanel.setMaximumSize(new Dimension(getWidth() -18, 200));
+            activityPanel.setPreferredSize(new Dimension(getWidth() -18, 200));
             activitiesPanel.add(activityPanel);
         }
         activitiesPanel.revalidate();
@@ -136,10 +137,16 @@ public class ActivityListPanel extends JPanel {
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         JPanel namePanel = new JPanel(new BorderLayout());
-        JLabel nameLabel = new JLabel(activity.getName());
-        nameLabel.setFont(new Font(arialFont, Font.BOLD, 16));
-        nameLabel.setBorder(new EmptyBorder(0, 20, 0, 0));
-        namePanel.add(nameLabel, BorderLayout.CENTER);
+
+        JButton modifyButton = new JButton(new ImageIcon(getClass().getResource("/img/modify-icon.png")));
+        modifyButton.setBorder(BorderFactory.createEmptyBorder());
+        modifyButton.setContentAreaFilled(false);
+        modifyButton.addActionListener(e -> {
+            ObjectId activityId = activity.getActivityId();
+            navigationListener.navigateTo(NavigationRouteEnum.MODIFYACTIVITY, activityId);
+        });
+        modifyButton.setPreferredSize(new Dimension(50, 50));
+        namePanel.add(modifyButton, BorderLayout.WEST);
 
         JButton deleteButton = new JButton(new ImageIcon(getClass().getResource("/img/trash-icon.png")));
         deleteButton.setBorder(BorderFactory.createEmptyBorder());
@@ -147,13 +154,18 @@ public class ActivityListPanel extends JPanel {
         deleteButton.addActionListener(e -> {
             ObjectId activityId = activity.getActivityId();
             activityController.deleteActivity(activityId);
-            navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST);
+            navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST, null);
         });
-        deleteButton.setPreferredSize(new Dimension(100, 50));
+        deleteButton.setPreferredSize(new Dimension(50, 50));
         namePanel.add(deleteButton, BorderLayout.EAST);
-    
+
+        JLabel nameLabel = new JLabel(activity.getName());
+        nameLabel.setFont(new Font(arialFont, Font.BOLD, 16));
+        nameLabel.setBorder(new EmptyBorder(0, 20, 0, 0));
+        namePanel.add(nameLabel, BorderLayout.CENTER);
+
         panel.add(namePanel, BorderLayout.NORTH);
-    
+
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new GridLayout(1, 4));
         detailsPanel.setBorder(new EmptyBorder(0, 20, 0, 0));

@@ -154,7 +154,7 @@ public class RegisterPanel extends JPanel {
             });
             futureUserId.thenAccept(userId -> {
                 context.connectNewUser(userId);
-                navigationListener.navigateTo(NavigationRouteEnum.WORKOUTINFO);
+                navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST, null);
             }).exceptionally(exception -> {
                 Throwable cause = exception.getCause();
                 if (cause instanceof AthleteValidationException) {
