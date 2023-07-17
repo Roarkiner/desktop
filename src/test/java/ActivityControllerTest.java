@@ -151,11 +151,11 @@ class ActivityControllerTest {
         ActivityModel activity2 = new ActivityModel("Activity test 2", 0.1, new Date(), 0.1, 0.1);
         activity2.setActivityId(new ObjectId());
         activities.add(activity2);
-        List<ActivityModel> activitiesBeforeDeletion = List.copyOf(activities);
+        List<ActivityModel> activitiesBeforeDeletion = new ArrayList<>(activities);
         activities.removeIf(activity -> activity.getActivityId().equals(activityToDeleteId));
-        List<ActivityModel> activitiesAfterDeletion = List.copyOf(activities);
+        List<ActivityModel> activitiesAfterDeletion = new ArrayList<>(activities);
 
-        when(activityRepository.getAllActivities())
+        when(activityController.getAllActivities())
                 .thenReturn(activitiesBeforeDeletion)
                 .thenReturn(activitiesAfterDeletion);
 
