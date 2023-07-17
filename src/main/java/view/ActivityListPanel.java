@@ -3,6 +3,8 @@ package view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.bson.types.ObjectId;
+
 import controller.ActivityController;
 import enums.NavigationRouteEnum;
 import model.ActivityModel;
@@ -130,15 +132,28 @@ public class ActivityListPanel extends JPanel {
 
     private JPanel createActivityPanel(ActivityModel activity) {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 1));
+        panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
+        JPanel namePanel = new JPanel(new BorderLayout());
         JLabel nameLabel = new JLabel(activity.getName());
         nameLabel.setFont(new Font(arialFont, Font.BOLD, 16));
-        nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
         nameLabel.setBorder(new EmptyBorder(0, 20, 0, 0));
-        panel.add(nameLabel);
+        namePanel.add(nameLabel, BorderLayout.CENTER);
 
+        JButton deleteButton = new JButton(new ImageIcon(getClass().getResource("/img/trash-icon.png")));
+        deleteButton.setBorder(BorderFactory.createEmptyBorder());
+        deleteButton.setContentAreaFilled(false);
+        deleteButton.addActionListener(e -> {
+            ObjectId activityId = activity.getActivityId();
+            activityController.deleteActivity(activityId);
+            navigationListener.navigateTo(NavigationRouteEnum.ACTIVITYLIST);
+        });
+        deleteButton.setPreferredSize(new Dimension(100, 50));
+        namePanel.add(deleteButton, BorderLayout.EAST);
+    
+        panel.add(namePanel, BorderLayout.NORTH);
+    
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new GridLayout(1, 4));
         detailsPanel.setBorder(new EmptyBorder(0, 20, 0, 0));
