@@ -1,13 +1,17 @@
 repository\ActivityRepository.class
+view\ActivityListPanel.class
+helper\ActivityListCellRenderer.class
 view\RegisterPanel.class
 exceptions\AthleteValidationException.class
 App.class
 repository\AthleteRepository.class
+view\WorkoutInfosPanel.class
 AthleteRepository.class
 enums\PhysicalConditionEnum.class
 helper\CalendarDateHelper.class
-view\WorkoutInfoPanel.class
+view\WorkoutInfosPanel$1.class
 App$1.class
+view\NewActivityPanel.class
 enums\SexEnum.class
 model\AthleteModel.class
 controller\ActivityController.class
@@ -19,5 +23,8 @@ enums\NavigationRouteEnum.class
 exceptions\ActivityValidationException.class
 exceptions\NotEnoughActivitiesException.class
 controller\AthleteController.class
+view\WorkoutInfosPanel$2.class
+view\ModifyActivityPanel.class
 shared\NavigationListener.class
+view\LoadingScreenPanel.class
 shared\Connection.class

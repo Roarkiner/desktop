@@ -28,6 +28,8 @@ public class WorkoutInfosPanel extends JPanel {
     private JPanel errorPanel;
     private JLabel errorLabel;
     private JPanel physicalConditionPanel;
+    private JLabel physicalConditionLabel;
+
     private PhysicalConditionEnum currentPhysicalCondition = PhysicalConditionEnum.RAS;
 
     private String arialFont = "Arial";
@@ -91,7 +93,7 @@ public class WorkoutInfosPanel extends JPanel {
         };
         physicalConditionPanel.setPreferredSize(new Dimension(150, 150));
 
-        JLabel physicalConditionLabel = new JLabel(getLabelTextForPhysicalCondition(currentPhysicalCondition));
+        physicalConditionLabel = new JLabel(getLabelTextForPhysicalCondition(currentPhysicalCondition));
         physicalConditionLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         JPanel physicalConditionInfoPanel = new JPanel();
@@ -163,10 +165,11 @@ public class WorkoutInfosPanel extends JPanel {
             awcrLabel.setText("Il faut au minimum un mois d'entrainement pour pouvoir calculer le RCA");
         } else {
             awcrLabel.setText("RCA: " + workoutInformations.getAwcr());
-            PhysicalConditionEnum physicalCondition = getPhysicalCondition(workoutInformations);
-            currentPhysicalCondition = physicalCondition;
-            physicalConditionPanel.repaint();
         }
+        PhysicalConditionEnum physicalCondition = getPhysicalCondition(workoutInformations);
+        currentPhysicalCondition = physicalCondition;
+        physicalConditionLabel.setText(getLabelTextForPhysicalCondition(physicalCondition));
+        physicalConditionPanel.repaint();
     }
 
     private Color getColorForPhysicalCondition(PhysicalConditionEnum physicalCondtion) {

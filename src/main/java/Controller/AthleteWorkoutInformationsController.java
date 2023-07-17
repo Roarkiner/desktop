@@ -80,14 +80,15 @@ public class AthleteWorkoutInformationsController {
     }
 
     public PhysicalConditionEnum getPhysicalCondition(AthleteWorkoutInformationsModel athleteWorkoutInformations) {
+        Double customAwcr = athleteWorkoutInformations.getAwcr() == null ? 0 : athleteWorkoutInformations.getAwcr();
         if (athleteWorkoutInformations.getMonotony() < 2 &&
                 athleteWorkoutInformations.getConstraint() < 6000 &&
-                athleteWorkoutInformations.getAwcr() > 0.8 &&
-                athleteWorkoutInformations.getAwcr() < 1.3) {
+                customAwcr  > 0.8 &&
+                customAwcr < 1.3) {
             return PhysicalConditionEnum.OPTIMAL;
         } else if (athleteWorkoutInformations.getMonotony() >= 2.5 ||
                 athleteWorkoutInformations.getConstraint() >= 10000 ||
-                athleteWorkoutInformations.getAwcr() > 1.5) {
+                customAwcr > 1.5) {
             return PhysicalConditionEnum.DANGEROUS;
         } else if (athleteWorkoutInformations.getMonotony() >= 2 &&
                 athleteWorkoutInformations.getMonotony() < 2.5 ||
